@@ -39,11 +39,30 @@
             pos: self.pos
             size: self.size
 
+<Goal>:
+    size: 20,20
+    canvas:
+        Color:
+            rgba: 1,1,0,1
+        Ellipse:
+            pos: self.pos
+            size: self.size
+<Start>:
+    size: 20,20
+    canvas:
+        Color:
+            rgba: 0,1,0,0
+        Ellipse:
+            pos: self.pos
+            size: self.size
+
 <Game>:
     car: game_car
     ball1: game_ball1
     ball2: game_ball2
     ball3: game_ball3
+    start: game_start
+    goal: game_goal
 
     Car:
         id: game_car
@@ -56,4 +75,10 @@
         center: self.parent.center
     Ball3:
         id: game_ball3
+        center: self.parent.center
+    Start:
+        id: game_start
+        center: self.parent.center
+    Goal:
+        id: game_goal
         center: self.parent.center

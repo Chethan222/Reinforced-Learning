@@ -87,7 +87,6 @@ class DeepQNetwork:
 
         #Calculating output
         next_outputs = self.model(batch_next_state).detach().max(1)[0]
-
         target = self.gamma*next_outputs + batch_reward
 
         #Computing loss

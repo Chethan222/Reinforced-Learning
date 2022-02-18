@@ -63,7 +63,6 @@ def init():
 
     #Initializing the sand array with only zeros
     sand = np.zeros((longueur,largeur))
-    print('Sand   ',longueur,largeur)
 
     #The goal to reach is upper left of the  map
     goal_x = 20  
@@ -141,7 +140,16 @@ class Ball2(Widget):
          
 #Sensor3    
 class Ball3(Widget): 
-    pass            
+    pass  
+
+#Goal    
+class Goal(Widget): 
+    pass 
+
+#Start    
+class Start(Widget): 
+    pass 
+           
 
 #creating the game class 
 class Game(Widget):
@@ -149,7 +157,9 @@ class Game(Widget):
     ball1 = ObjectProperty(None)
     ball2 = ObjectProperty(None)
     ball3 = ObjectProperty(None)
-    
+    start = ObjectProperty(None)
+    goal = ObjectProperty(None)
+
     def serve_car(self):
         self.car.center = self.center
         self.car.velocity = Vector(6,0)
@@ -167,11 +177,16 @@ class Game(Widget):
         
         longueur = self.width
         largeur = self.height
-        
+
+  
         #Updating the game for the first time
         if FIRST:
             init()
-        
+            #Setting start and  goal once
+            self.goal.pos = (20,largeur-20)
+            self.start.pos = (0,0)
+  
+
         #Difference of x-coordinates of goal and car points
         xx = goal_x - self.car.x
 
@@ -186,7 +201,6 @@ class Game(Widget):
         #Upating the brain with reward and signal and getting corresponding action
         action = brain.update(last_reward,last_signal)
 
-        print('Last Reward : ',last_reward)
         #Getting score 
         scores.append(brain.score())
 
@@ -201,10 +215,9 @@ class Game(Widget):
         #Setting ball positions as the sensor position in the game(simulation)
         self.ball1.pos = self.car.sensor1   
         self.ball2.pos = self.car.sensor2   
-        self.ball3.pos = self.car.sensor3   
+        self.ball3.pos = self.car.sensor3 
         
         #Checking whether the car is on the san or not
-        print('sand[int(self.car.x),int(self.car.y)]',sand[int(self.car.x),int(self.car.y)])
         if sand[int(self.car.x),int(self.car.y)] > 0:
             #Slowing down the car if the car is on the sand
             self.car.velocity = Vector(1, 0).rotate(self.car.angle)
@@ -221,6 +234,8 @@ class Game(Widget):
             #Gets positive reward if it approaches the goal
             if goalDistance < last_distance:
                 last_reward = 0.3 
+            else:
+                last_reward = 0.1
         
         #Handling car's border conditions an giving -nagative rewards
         if self.car.x < 10:
